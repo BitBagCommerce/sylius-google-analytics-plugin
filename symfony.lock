@@ -82,6 +82,19 @@
             "ref": "fa845143b7e0a4c70aedd1a88c549e6d977e9ae5"
         }
     },
+    "hwi/oauth-bundle": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "20154480d558409ad3eb9de3644817c81fad2268"
+        },
+        "files": [
+            "config/packages/hwi_oauth.yaml",
+            "config/routes/hwi_oauth_routing.yaml"
+        ]
+    },
     "jms/serializer-bundle": {
         "version": "3.10",
         "recipe": {
@@ -131,6 +144,18 @@
             "ref": "d1227d002b70d1a1f941d91845fcd7ac7fbfc929"
         }
     },
+    "nyholm/psr7": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "4a8c0345442dcca1d8a2c65633dcf0285dd5a5a2"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "payum/payum-bundle": {
         "version": "2.5",
         "recipe": {
@@ -139,6 +164,18 @@
             "version": "2.4",
             "ref": "518ac22defa04a8a1d82479ed362e2921487adf0"
         }
+    },
+    "phpstan/phpstan": {
+        "version": "1.12",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "5e490cc197fb6bb1ae22e5abbc531ddc633b6767"
+        },
+        "files": [
+            "phpstan.dist.neon"
+        ]
     },
     "phpunit/phpunit": {
         "version": "9.5",
@@ -427,6 +464,18 @@
             "config/packages/webpack_encore.yaml",
             "package.json",
             "webpack.config.js"
+        ]
+    },
+    "symfony/workflow": {
+        "version": "6.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.3",
+            "ref": "3b2f8ca32a07fcb00f899649053943fa3d8bbfb6"
+        },
+        "files": [
+            "config/packages/workflow.yaml"
         ]
     },
     "willdurand/hateoas-bundle": {
