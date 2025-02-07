@@ -1,7 +1,9 @@
-# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
-flysystem:
-    storages:
-        default.storage:
-            adapter: 'local'
-            options:
-                directory: '%kernel.project_dir%/var/storage/default'
+knp_gaufrette:
+    adapters:
+        local_storage:
+            local:
+                directory: "%kernel.project_dir%/var/storage"
+
+    filesystems:
+        my_storage:
+            adapter: local_storage
