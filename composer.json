@@ -1,12 +1,16 @@
 {
-    "name": "spinbits/google-analytics-4-plugin",
+    "name": "bitbag/google-analytics-4-plugin",
     "type": "sylius-plugin",
-    "description": "Spinbits Google Analytics 4 plugin for Sylius.",
+    "description": "Spinbits Google Analytics 4 plugin for Sylius maintained by BitBag.",
     "keywords": ["sylius", "sylius-plugin", "google", "analytics", "spinbits"],
     "license": "MIT",
     "authors": [  {
             "name": "Spinbits",
             "homepage": "https://spinbits.io"
+        },
+        {
+            "name": "BitBag",
+            "homepage": "https://bitbag.io"
         }
     ],
     "require": {
