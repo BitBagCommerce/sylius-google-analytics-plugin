@@ -94,6 +94,10 @@ jobs:
                 run: composer require "sylius/sylius:${{ matrix.sylius }}" --no-update --no-scripts --no-interaction
 
             -
+                name: Allow api-platform 2.7 pinned by Sylius despite its advisories
+                run: composer config --no-plugins policy.advisories.block false
+
+            -
                 name: Install PHP dependencies
                 run: composer install --no-interaction
 
