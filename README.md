@@ -36,6 +36,12 @@ https://tagassistant.google.com/
 ## Details
 It is designed based on backend Sylius events for high compatibility no matter what template your Sylius store is using.
 
+## Compatibility
+
+| Sylius         | PHP           | Symfony    |
+|----------------|---------------|------------|
+| 1.13.x, 1.14.x | 8.1, 8.2, 8.3 | 5.4, 6.4   |
+
 ## Quickstart Installation
 
 1. Add configuration to `config/services.yaml` with your Google Tag identificator default for all channels:
@@ -56,7 +62,7 @@ It is designed based on backend Sylius events for high compatibility no matter w
 2. Install plugin:
 
     ```bash
-    composer require spinbits/google-analytics-4-plugin
+    composer require bitbag/google-analytics-4-plugin
     ```
 
 ### Develop

@@ -21,21 +21,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: ["8.0", "8.1"]
-                symfony: ["^5.4", "^6.0"]
-                sylius: ["~1.11.0", "~1.12.0"]
-                node: ["20.x"]
+                php: ["8.1", "8.2", "8.3"]
+                symfony: ["^5.4", "^6.4"]
+                sylius: ["~1.13.0", "~1.14.0"]
                 mysql: ["8.0"]
-                
-                exclude:
-                    -   
-                        php: "8.1"
-                        symfony: "^6.0"
-                        sylius: "~1.11.0"
-                    -   
-                        php: "8.0"
-                        symfony: "^6.0"
-                        sylius: "~1.11.0"
 
         env:
             APP_ENV: test
@@ -43,7 +32,7 @@ jobs:
 
         steps:
             -
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -
                 name: Setup PHP
@@ -53,12 +42,6 @@ jobs:
                     extensions: intl
                     tools: symfony
                     coverage: none
-
-            -
-                name: Setup Node
-                uses: actions/setup-node@v2
-                with:
-                    node-version: "${{ matrix.node }}"
 
             -
                 name: Shutdown default MySQL
@@ -76,16 +59,12 @@ jobs:
                 run: php -v | head -n 1 | awk '{ print $2 }' > .php-version
 
             -
-                name: Install certificates
-                run: symfony server:ca:install
-
-            -
                 name: Run Chrome Headless
                 run: google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --allow-insecure-localhost --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*' http://127.0.0.1 > /dev/null 2>&1 &
 
             -
                 name: Run webserver
-                run: (cd tests/Application && symfony server:start --port=8080 --dir=public --daemon)
+                run: (cd tests/Application && symfony server:start --port=8080 --dir=public --daemon --no-tls)
 
             -
                 name: Get Composer cache directory
@@ -94,7 +73,7 @@ jobs:
 
             -
                 name: Cache Composer
-                uses: actions/cache@v3
+                uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json **/composer.lock') }}
@@ -106,7 +85,7 @@ jobs:
                 if: matrix.symfony != ''
                 run: |
                     composer global config --no-plugins allow-plugins.symfony/flex true
-                    composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^2.2.2"
+                    composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^2.4"
                     composer config extra.symfony.require "${{ matrix.symfony }}"
 
             -
@@ -115,32 +94,12 @@ jobs:
                 run: composer require "sylius/sylius:${{ matrix.sylius }}" --no-update --no-scripts --no-interaction
 
             -
+                name: Allow api-platform 2.7 pinned by Sylius despite its advisories
+                run: composer config --no-plugins policy.advisories.block false
+
+            -
                 name: Install PHP dependencies
                 run: composer install --no-interaction
-
-            -
-                name: Get Yarn cache directory
-                id: yarn-cache
-                run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-
-            -
-                name: Cache Yarn
-                uses: actions/cache@v2
-                with:
-                    path: ${{ steps.yarn-cache.outputs.dir }}
-                    key: ${{ runner.os }}-node-${{ matrix.node }}-yarn-${{ hashFiles('**/package.json **/yarn.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-node-${{ matrix.node }}-yarn-
-
-            -
-                name: Copy package.json.dist to package.json
-                if: matrix.sylius != ''
-                run: (cd tests/Application && cp package.json.\${{ matrix.sylius }}.dist package.json)
-
-            -
-                name: Install JS dependencies
-                run: (cd tests/Application && yarn install)
 
             -
                 name: Prepare test application database
@@ -150,9 +109,7 @@ jobs:
 
             -
                 name: Prepare test application assets
-                run: |
-                    (cd tests/Application && bin/console assets:install public -vvv)
-                    (cd tests/Application && yarn install)
+                run: (cd tests/Application && bin/console assets:install public -vvv)
 
             -
                 name: Prepare test application cache
@@ -192,9 +149,9 @@ jobs:
 
             -
                 name: Upload Behat logs
-                uses: actions/upload-artifact@v2
+                uses: actions/upload-artifact@v4
                 if: failure()
                 with:
-                    name: Behat logs
+                    name: "Behat logs (Sylius ${{ matrix.sylius }}, PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }})"
                     path: etc/build/
                     if-no-files-found: ignore
